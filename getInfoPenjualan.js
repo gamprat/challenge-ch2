@@ -39,8 +39,6 @@ const dataPenjualanNovel = [{
 getInfoPenjualan = (dataPenjualan) => {
     let totalKeuntungan = 0;
     let totalModal = 0;
-    let bukuTerlaris = { namaProduk: '', totalTerjual: 0 };
-    let penulisTerlaris = { penulis: '', totalTerjual: 0 };
 
     if(typeof(dataPenjualan) == "object") {
         dataPenjualan.map((buku) => {
@@ -48,35 +46,35 @@ getInfoPenjualan = (dataPenjualan) => {
             totalKeuntungan += keuntungan;
 
             totalModal += buku.hargaBeli * buku.totalTerjual;
-
-            if (buku.totalTerjual > bukuTerlaris.totalTerjual) {
-                bukuTerlaris = {
-                    namaProduk: buku.namaProduk,
-                    totalTerjual: buku.totalTerjual,
-                };
-            }
-
-            if (buku.totalTerjual > penulisTerlaris.totalTerjual) {
-                penulisTerlaris = {
-                    penulis: buku.penulis,
-                    totalTerjual: buku.totalTerjual,
-                };
-            }
         });
     }
 
-    let persentaseKeuntungan = ((totalKeuntungan / totalModal) * 100).toFixed(2) + '%';
+    const persentaseKeuntungan = ((totalKeuntungan / totalModal) * 100).toFixed(2) + '%';
+
+    const bukuTerlaris = dataPenjualanNovel.reduce((buku, bukularis) => {
+        if (bukularis.totalTerjual > buku.totalTerjual) {
+            return bukularis
+        }
+        return buku
+    })
+
+    const penulisTerlaris = dataPenjualanNovel.reduce((penulis, penulislaris) => {
+        if (penulislaris.totalTerjual > penulis.totalTerjual) {
+            return penulislaris
+        }
+        return penulis
+    })
 
     return {
-        totalKeuntungan: rupiah(totalKeuntungan),
-        totalModal: rupiah(totalModal),
+        totalKeuntungan: duit(totalKeuntungan),
+        totalModal: duit(totalModal),
         persentaseKeuntungan,
         produkBukuTerlaris: bukuTerlaris.namaProduk,
         penulisBukuTerlaris: penulisTerlaris.penulis,
     };
 };
 
-const rupiah = (number) => {
+const duit = (number) => {
     return new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR"
