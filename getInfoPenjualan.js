@@ -65,7 +65,7 @@ getInfoPenjualan = (dataPenjualan) => {
         });
     }
 
-    const persentaseKeuntungan = ((totalKeuntungan / totalModal) * 100).toFixed(2) + '%';
+    let persentaseKeuntungan = ((totalKeuntungan / totalModal) * 100).toFixed(2) + '%';
 
     return {
         totalKeuntungan: rupiah(totalKeuntungan),
