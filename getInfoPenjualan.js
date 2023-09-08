@@ -42,26 +42,28 @@ getInfoPenjualan = (dataPenjualan) => {
     let bukuTerlaris = { namaProduk: '', totalTerjual: 0 };
     let penulisTerlaris = { penulis: '', totalTerjual: 0 };
 
-    dataPenjualan.map((buku) => {
-        let keuntungan = (buku.hargaJual - buku.hargaBeli) * buku.totalTerjual;
-        totalKeuntungan += keuntungan;
+    if(typeof(dataPenjualan) == "object") {
+        dataPenjualan.map((buku) => {
+            let keuntungan = (buku.hargaJual - buku.hargaBeli) * buku.totalTerjual;
+            totalKeuntungan += keuntungan;
 
-        totalModal += buku.hargaBeli * buku.totalTerjual;
+            totalModal += buku.hargaBeli * buku.totalTerjual;
 
-        if (buku.totalTerjual > bukuTerlaris.totalTerjual) {
-            bukuTerlaris = {
-                namaProduk: buku.namaProduk,
-                totalTerjual: buku.totalTerjual,
-            };
-        }
+            if (buku.totalTerjual > bukuTerlaris.totalTerjual) {
+                bukuTerlaris = {
+                    namaProduk: buku.namaProduk,
+                    totalTerjual: buku.totalTerjual,
+                };
+            }
 
-        if (buku.totalTerjual > penulisTerlaris.totalTerjual) {
-            penulisTerlaris = {
-                penulis: buku.penulis,
-                totalTerjual: buku.totalTerjual,
-            };
-        }
-    });
+            if (buku.totalTerjual > penulisTerlaris.totalTerjual) {
+                penulisTerlaris = {
+                    penulis: buku.penulis,
+                    totalTerjual: buku.totalTerjual,
+                };
+            }
+        });
+    }
 
     const persentaseKeuntungan = ((totalKeuntungan / totalModal) * 100).toFixed(2) + '%';
 
